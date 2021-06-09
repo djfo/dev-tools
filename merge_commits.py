@@ -3,19 +3,25 @@ import subprocess
 import sys
 
 
+def run(argv: list[str]) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        argv,
+        capture_output=True,
+        encoding='utf-8'
+    )
+
+
 def error(str: str) -> None:
     sys.stderr.write("%s\n" % str)
 
 
 def get_merge_commits(base: str) -> list[str]:
-    completed = subprocess.run(
+    completed = run(
         [
             "git",
             "log",
             "--pretty=tformat:%h,%p", "%s..HEAD" % base
-        ],
-        capture_output=True,
-        encoding='utf-8'
+        ]
     )
     re_merge_commit = r'^([0-9a-fA-f]+),([0-9a-fA-F]+) ([0-9a-fA-F]+)$'
     output = completed.stdout
@@ -31,15 +37,13 @@ def get_merge_commits(base: str) -> list[str]:
 def find_matches(merge_commits: list[str], patterns: list[str]) -> list[str]:
     matches = []
     for commit_hash in merge_commits:
-        completed = subprocess.run(
+        completed = run(
             [
                 "git",
                 "show",
                 "--pretty=tformat:%s",
                 commit_hash
-            ],
-            capture_output=True,
-            encoding="utf-8"
+            ]
         )
         first_line = completed.stdout.splitlines()[0]
         found_match = False
