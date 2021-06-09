@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 
-def error(str: str):
+def error(str: str) -> None:
     sys.stderr.write("%s\n" % str)
 
 
@@ -54,7 +54,7 @@ def find_matches(merge_commits: list[str], patterns: list[str]) -> list[str]:
     return matches
 
 
-def main():
+def main() -> None:
     commit_hash, *patterns = sys.argv[1:]
     merge_commits = get_merge_commits(commit_hash)
     print("Number of merge commits: %d" % len(merge_commits))
