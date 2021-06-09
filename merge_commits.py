@@ -2,8 +2,10 @@ import re
 import subprocess
 import sys
 
+
 def error(str: str):
     sys.stderr.write("%s\n" % str)
+
 
 def get_merge_commits(base: str) -> list[str]:
     completed = subprocess.run(
@@ -24,6 +26,7 @@ def get_merge_commits(base: str) -> list[str]:
         if match:
             merge_commits.append(match.group(1))
     return merge_commits
+
 
 def find_matches(merge_commits: list[str], patterns: list[str]) -> list[str]:
     matches = []
@@ -50,6 +53,7 @@ def find_matches(merge_commits: list[str], patterns: list[str]) -> list[str]:
             error("no match: »%s«" % first_line)
     return matches
 
+
 def main():
     commit_hash, *patterns = sys.argv[1:]
     merge_commits = get_merge_commits(commit_hash)
@@ -69,6 +73,7 @@ def main():
         print("(none)")
     for title in matches:
         print("- %s" % title)
+
 
 if __name__ == "__main__":
     main()
