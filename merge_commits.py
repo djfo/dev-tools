@@ -25,7 +25,7 @@ def get_merge_commits(base: str) -> list[str]:
             merge_commits.append(match.group(1))
     return merge_commits
 
-def find_matches(merge_commits, re_extract) -> list[str]:
+def find_matches(merge_commits: list[str], patterns: list[str]) -> list[str]:
     matches = []
     for commit_hash in merge_commits:
         completed = subprocess.run(
@@ -39,15 +39,19 @@ def find_matches(merge_commits, re_extract) -> list[str]:
             encoding="utf-8"
         )
         first_line = completed.stdout.splitlines()[0]
-        match = re.search(re_extract, first_line, )
-        if match:
-            matches.append(match.group(1))
-        else:
+        found_match = False
+        for pattern in patterns:
+            match = re.search(pattern, first_line)
+            if match:
+                matches.append(match.group(1))
+                found_match = True
+                continue
+        if not found_match:
             error("no match: »%s«" % first_line)
     return matches
 
 def main():
-    commit_hash, pattern, *rest = sys.argv[1:]
+    commit_hash, *patterns = sys.argv[1:]
     merge_commits = get_merge_commits(commit_hash)
     print("Number of merge commits: %d" % len(merge_commits))
     print()
@@ -60,7 +64,7 @@ def main():
     print()
 
     print("Matches:")
-    matches = find_matches(merge_commits, pattern)
+    matches = find_matches(merge_commits, patterns)
     if not matches:
         print("(none)")
     for title in matches:
