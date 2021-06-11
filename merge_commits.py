@@ -62,6 +62,17 @@ def find_matches(merge_commits: list[str], patterns: list[str]) -> list[str]:
     return matches
 
 
+def partition_args(raw: list[str]):
+    args = []
+    flags = []
+    for arg in raw:
+        if len(arg) > 0 and arg[0] == '-':
+            flags.append(arg)
+        else:
+            args.append(arg)
+    return (args, flags)
+
+
 def main() -> None:
     commit_hash = None
     patterns = []
