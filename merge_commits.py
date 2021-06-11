@@ -1,3 +1,4 @@
+import datetime
 import re
 import subprocess
 import sys
@@ -74,11 +75,17 @@ def partition_args(raw: list[str]):
 
 
 def main() -> None:
+    (args, flags) = partition_args(sys.argv[1:])
+
     commit_hash = None
     patterns = []
     if len(sys.argv) > 1:
-        commit_hash, *patterns = sys.argv[1:]
-    merge_commits = get_merge_commits(commit_hash)
+        commit_hash, *patterns = args
+    since = None
+    if '--today' in flags:
+        today = datetime.date.today()
+        since = '%s 00:00:00' % today.isoformat()
+    merge_commits = get_merge_commits(commit_hash, since)
     print("Number of merge commits: %d" % len(merge_commits))
     print()
 
