@@ -79,7 +79,7 @@ def main() -> None:
 
     commit_hash = None
     patterns = []
-    if len(sys.argv) > 1:
+    if len(args):
         commit_hash, *patterns = args
     since = None
     if '--today' in flags:
