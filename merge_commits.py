@@ -61,7 +61,10 @@ def find_matches(merge_commits: list[str], patterns: list[str]) -> list[str]:
 
 
 def main() -> None:
-    commit_hash, *patterns = sys.argv[1:]
+    commit_hash = None
+    patterns = []
+    if len(sys.argv) > 1:
+        commit_hash, *patterns = sys.argv[1:]
     merge_commits = get_merge_commits(commit_hash)
     print("Number of merge commits: %d" % len(merge_commits))
     print()
