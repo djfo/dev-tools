@@ -16,7 +16,7 @@ def error(str: str) -> None:
     sys.stderr.write("%s\n" % str)
 
 
-def get_merge_commits(base: Optional[str]) -> list[str]:
+def get_merge_commits(base: Optional[str], since: Optional[str]) -> list[str]:
     argv = [
         "git",
         "log",
@@ -24,6 +24,8 @@ def get_merge_commits(base: Optional[str]) -> list[str]:
     ]
     if base:
         argv.append("%s..HEAD" % base)
+    if since:
+        argv.append('--since=%s' % since)
     completed = run(argv)
     re_merge_commit = r'^([0-9a-fA-f]+),([0-9a-fA-F]+) ([0-9a-fA-F]+)$'
     output = completed.stdout
