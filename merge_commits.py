@@ -79,12 +79,13 @@ def main() -> None:
 
     commit_hash = None
     patterns = []
-    if len(args):
-        commit_hash, *patterns = args
     since = None
     if '--today' in flags:
         today = datetime.date.today()
         since = '%s 00:00:00' % today.isoformat()
+        patterns = args
+    elif len(args):
+        commit_hash, *patterns = args
     merge_commits = get_merge_commits(commit_hash, since)
     print("Number of merge commits: %d" % len(merge_commits))
     print()
