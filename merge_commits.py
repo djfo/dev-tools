@@ -76,12 +76,13 @@ def main() -> None:
         print("- %s" % commit)
     print()
 
-    print("Matches:")
-    matches = find_matches(merge_commits, patterns)
-    if not matches:
-        print("(none)")
-    for title in matches:
-        print("- %s" % title)
+    if len(patterns) > 0:
+        print("Matches:")
+        matches = find_matches(merge_commits, patterns)
+        if not matches:
+            print("(none)")
+        for title in matches:
+            print("- %s" % title)
 
 
 if __name__ == "__main__":
