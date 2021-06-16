@@ -75,6 +75,17 @@ def partition_args(raw: list[str]) -> tuple[list[str], dict[str, Optional[str]]]
     return (args, flags)
 
 
+def parse_relative_date(raw: str) -> Optional[datetime.datetime]:
+    match = re.match(r'([0-9]+)[ ]*([a-z]+)', raw)
+    if not match:
+        return None
+    n = int(match.group(1))
+    if match.group(2) == 'days':
+        return datetime.datetime.now() - datetime.timedelta(days=n)
+    else:
+        return None
+
+
 def main() -> None:
     (args, flags) = partition_args(sys.argv[1:])
 
