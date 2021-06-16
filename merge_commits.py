@@ -96,6 +96,12 @@ def main() -> None:
         today = datetime.date.today()
         since = '%s 00:00:00' % today.isoformat()
         patterns = args
+    elif raw_since := flags['--since']:
+        dt = parse_relative_date(raw_since)
+        if not dt:
+            raise Exception
+        since = dt.isoformat()
+        patterns = args
     elif len(args):
         commit_hash, *patterns = args
     merge_commits = get_merge_commits(commit_hash, since)
