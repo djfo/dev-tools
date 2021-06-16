@@ -63,12 +63,13 @@ def find_matches(merge_commits: list[str], patterns: list[str]) -> list[str]:
     return matches
 
 
-def partition_args(raw: list[str]):
+def partition_args(raw: list[str]) -> tuple[list[str], dict[str, Optional[str]]]:
     args = []
-    flags = []
+    flags = {}
     for arg in raw:
         if len(arg) > 0 and arg[0] == '-':
-            flags.append(arg)
+            key, *value = arg.split('=', 1)
+            flags[key] = value[0] if len(value) else None
         else:
             args.append(arg)
     return (args, flags)
