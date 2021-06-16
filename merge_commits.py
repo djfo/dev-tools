@@ -96,7 +96,10 @@ def main() -> None:
         today = datetime.date.today()
         since = '%s 00:00:00' % today.isoformat()
         patterns = args
-    elif raw_since := flags['--since']:
+    elif '--since' in flags:
+        raw_since = flags['--since']
+        if not raw_since:
+            raise Exception
         dt = parse_relative_date(raw_since)
         if not dt:
             raise Exception
